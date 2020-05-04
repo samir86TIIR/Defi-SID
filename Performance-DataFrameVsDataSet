@@ -8,9 +8,6 @@ object DFvsDSPerformance extends App {
     val sparkSession = SparkSession.builder()
     .master("local")
     .appName("Dataset Basics")
-    .master("yarn")
-    .config("spark.hadoop.fs.defaultFS", "hdfs://172.28.100.124:9000")
-    .config("spark.hadoop.yarn.resourcemanager.address", "172.28.100.124:8032")
     .getOrCreate()
     
     var startTime: Long = 0
