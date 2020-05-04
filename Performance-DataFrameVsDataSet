@@ -1,0 +1,52 @@
+import org.apache.spark.sql.SparkSession
+
+object DFvsDSPerformance extends App {
+    
+    case class Valeursfoncieres(`Valeur fonciere`: String) 
+    
+    
+    val sparkSession = SparkSession.builder()
+    .master("local")
+    .appName("Dataset Basics")
+    .master("yarn")
+    .config("spark.hadoop.fs.defaultFS", "hdfs://172.28.100.124:9000")
+    .config("spark.hadoop.yarn.resourcemanager.address", "172.28.100.124:8032")
+    .getOrCreate()
+    
+    var startTime: Long = 0
+    var endTime: Long = 0
+    
+    startTime = System.currentTimeMillis()
+    
+ 
+    val valeursDF = sparkSession.read
+    .option("delimiter", "|")
+    .option("header", "true")
+    .option("inferSchema", "true")
+    .csv("hdfs://172.28.100.124:9000/user/utilisateur/data/valeursfoncieres-*.csv")
+     
+   
+    val filteredRows = valeursDF.filter("`Code postal`== 75005")
+    println("ValeursDF : " + filteredRows.count())
+    
+    endTime = System.currentTimeMillis()
+    
+    
+    import sparkSession.implicits._
+    
+      
+    val startTimeDS = System.currentTimeMillis()
+    val valeursDS = sparkSession.read
+    .option("header", "true")
+    .option("inferSchema", "true")
+    .option("delimiter", "|")
+    .csv("hdfs://172.28.100.124:9000/user/utilisateur/data/valeursfoncieres-*.csv")
+    .as[Valeursfoncieres]
+    
+    val filteredRowsDS = valeursDS.filter("`Code postal` == 75005")
+    println("ValeursDS : " + filteredRowsDS.count())
+    val endTimeDS = System.currentTimeMillis()
+    
+    println ("Temps pour calculer avec Dataframe: " + (endTime - startTime) / 1000.0)
+    println ("Temps pour calculer avec Dataset: " + (endTimeDS - startTimeDS) / 1000.0)
+}
