@@ -1,0 +1,31 @@
+import org.apache.spark.sql.SparkSession
+
+object RDDwithCSVFile {
+  def main(args: Array[String]): Unit = {
+    val spark = SparkSession.builder()
+    .appName("RDD with CSV Files")
+    .master("local")
+    .getOrCreate()
+    
+    val csvRDD = spark.sparkContext.textFile("C:\\Users\\utilisateur\\Documents\\SID prog\\jeu_de_données\\valeursfoncieres-2019.csv")
+    // csvRDD.take(10).foreach(println)
+    
+    
+    val header = csvRDD.first()
+    
+    val csvRDDWithoutHeader = csvRDD.filter(_ != header)
+    
+    // csvRDDWithoutHeader.take(10).foreach(println)
+    
+    val Valeurfonciere_columns = csvRDDWithoutHeader.map(line => {
+      val colArray = line.split('|')
+      Array(colArray(10), colArray(16), colArray(17)).mkString(" ")
+    
+    })
+    
+    Valeurfonciere_columns.take(10).foreach(println)
+    
+    Valeurfonciere_columns.saveAsTextFile("output_destination/Valeurfonciere_columns")
+  
+  }     
+}
