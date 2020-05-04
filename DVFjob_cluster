@@ -1,0 +1,20 @@
+import org.apache.spark.sql.SparkSession
+
+object DVFJob extends App {
+  
+  val spark = SparkSession.builder()
+  .appName("DVF Job")
+  .master("yarn")
+  .config("spark.hadoop.fs.defaultFS", "hdfs://172.28.100.124:9000")
+  .config("spark.hadoop.yarn.resourcemanager.address", "172.28.100.124:8032")
+  .config("spark.yarn.am.memory", "2650m")
+  .config("spark.yarn.am.cores", "7")
+  .config("spark.yarn.jars", "hdfs://172.28.100.124:9000/user/utilisateur/jars/*.jar")
+  .config("spark.yarn.applications.classpath", "$HADOOP_CONF_DIR, $HADOOP_MAPED_HOME/*, $HADOOP_MAPED_HOME/lib/* $HADOOP_COMMON_HOME/*, $HADOOP_COMMON_HOME/lib/* , $HADOOP_HDFS_HOME/*, $HADOOP_HDFS_HOME/lib/*, $YARN_HOME/*, $YARN_HOME/lib/* ")
+  .getOrCreate()
+  
+  println("========= DVF Job =====")
+  
+  
+  
+}
