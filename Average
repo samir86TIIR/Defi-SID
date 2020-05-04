@@ -1,0 +1,26 @@
+import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.functions.udf
+
+object Average {
+  def main(args: Array[String]): Unit = {
+    val spark = SparkSession.builder()
+    .appName("Average")
+    .master("local")
+    .getOrCreate()
+    
+    val valeurfonciere = spark.read.options(Map("header" -> "true", "inferSchema" -> "true", "delimiter" -> "|"))
+      .csv("C:\\Users\\utilisateur\\Documents\\SID prog\\jeu_de_données\\valeursfoncieres-2019.csv")
+      
+    
+    val moyenneUDF = udf[Integer, Integer](avgerage)
+    
+    spark.sqlContext.udf.register("moyenne_udf", moyenneUDF)
+    
+    valeurfonciere.createOrReplaceTempView("valeurfonciere_table")    
+    
+    spark.sql("select moyenne_udf(`Code postal`) as Valeur_Moyenne").show()
+    
+  }
+  
+  def avgerage(num: Integer): Integer = (num)
+}
