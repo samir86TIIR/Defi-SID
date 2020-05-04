@@ -1,0 +1,18 @@
+package RDD
+
+import org.apache.spark.sql.SparkSession
+
+object SparkContextWithSparkSession {
+  def main(args: Array[String]): Unit = {
+    
+    val sparkSession = SparkSession.builder()
+    .appName("Spark Session")
+    .master("local")
+    .getOrCreate()
+    
+    val file = "C:\\Users\\utilisateur\\Documents\\SID prog\\jeu_de_données\\valeursfoncieres-2019.csv"
+    val fileRDD = sparkSession.sparkContext.textFile(file)
+    
+    println("Nombres d'enregistrements: " + fileRDD.count())
+    fileRDD.take(10).foreach(println)
+  }
