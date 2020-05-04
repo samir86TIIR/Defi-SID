@@ -18,7 +18,7 @@ object Average {
     
     valeurfonciere.createOrReplaceTempView("valeurfonciere_table")    
     
-    spark.sql("select moyenne_udf(`Code postal`) as Valeur_Moyenne").show()
+    spark.sql("select moyenne_udf(`Valeur fonciere`) as Valeur_Moyenne").show()
     
   }
   
