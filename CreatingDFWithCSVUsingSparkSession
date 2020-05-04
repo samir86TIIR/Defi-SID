@@ -1,0 +1,22 @@
+import org.apache.spark.sql.SparkSession
+
+object CreatingDFWithCSVUsingSparkSession {
+  def main(args: Array[String]): Unit = {
+    val spark = SparkSession.builder()
+    .master("local")
+    .appName("Creating DF using CSV using Spark Session")
+    .getOrCreate()
+    
+    val properties = Map("header" -> "true", "inferSchema" -> "true")
+    val df = spark.read
+//    .option("header", "true")
+//    .option("inferSchema", "true")
+    .options(properties)
+    .option("delimiter", "|")
+    .csv("src/test/resources/datasets/valeursfoncieres-2019.csv")
+    
+    df.printSchema()
+    
+    df.show()
+  }
+}
